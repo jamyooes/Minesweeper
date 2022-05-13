@@ -7,6 +7,8 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtWidgets import QHBoxLayout
+from PyQt5.QtWidgets import QVBoxLayout
+from PyQt5.QtWidgets import QGridLayout
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtCore import Qt
@@ -24,6 +26,7 @@ class MineSweeperUI(QMainWindow):
         # a home screen
         self.Home()
     
+    # home screen
     def Home(self):
         # Home screen Widget and central widget
         self.current_screen = QWidget()
@@ -45,7 +48,6 @@ class MineSweeperUI(QMainWindow):
         self.mines = 10
         play = PlayPage(self)
         self.layout.addWidget(play)
-        self.setCentralWidget(play)
     
     # medium difficulty when selected
     def PlayMedium(self):
@@ -54,7 +56,6 @@ class MineSweeperUI(QMainWindow):
         self.mines = 40
         play = PlayPage(self)
         self.layout.addWidget(play)
-        self.setCentralWidget(play)
 
     # Hard difficulty when selected
     def PlayHard(self):
@@ -63,9 +64,8 @@ class MineSweeperUI(QMainWindow):
         self.mines = 99
         play = PlayPage(self)
         self.layout.addWidget(play)
-        self.setCentralWidget(play)
 
-# Play Widget
+# Play Widgets (easy, medium, hard)
 class PlayWidget(QWidget):
     def __init__(self, parent=None):
         super(PlayWidget, self).__init__(parent)
@@ -84,8 +84,7 @@ class PlayWidget(QWidget):
         self.medium.clicked.connect(self.parent().PlayMedium) 
         self.hard.clicked.connect(self.parent().PlayHard) 
 
-
-# Filler Screen will become game logic
+# Game Screen
 class PlayPage(QWidget):
     def __init__(self, parent=None):
         super(PlayPage, self).__init__(parent)
@@ -119,16 +118,38 @@ class PlayPage(QWidget):
         self.totalMines.setFont(fontMenu)
         self.timeDisplay.setFont(fontMenu)
 
-        # add layouts and widget to the layout
+        # add top part of the menu and widget to the layout
         layout.addWidget(self.totalMines)
         layout.addWidget(self.reset)
         layout.addWidget(self.timeDisplay)
         layout.addWidget(self.returnHome)
 
-        # set the layout
-        self.setLayout(layout)
+        # horizontal box layout storing the entire screen for the game
+        screen = QVBoxLayout()
+        screen.addLayout(layout)
 
-        
+        # grid for the game
+        self.grid = QGridLayout()
+        self.grid.setSpacing(10)
+
+        screen.addLayout(self.grid)
+
+        # set the layout
+        window.setLayout(screen)
+        parent.setCentralWidget(window)
+
+    # game set up
+    def initMap(self):
+        for row in range (0, self.gameLength):
+            for col in range (0, self.gameWidth):
+                pass
+
+class MinesweeperLogic(QWidget):
+    def __init__(self, row, col):
+        super(MinesweeperLogic, self)
+        self.row = row 
+        self.col = col
+
 def main():
     # instance of class
     mineInstance = QApplication(sys.argv)
