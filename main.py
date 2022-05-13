@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import QHBoxLayout
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QFont
 
 class MineSweeperUI(QMainWindow):
     def __init__(self):
@@ -95,12 +96,27 @@ class PlayPage(QWidget):
         window = QWidget()
 
         # label for the remaining mines
-        self.totalMines = QLabel()
-        self.totalMines.setAlignment(Qt.AlignCenter)
+        self.totalMines = QLabel(str(self.mines))
+        self.totalMines.setAlignment(Qt.AlignHCenter)
         
-        self.totalMines.setText("mines")
+        # label for setting the clock to minesweeper
+        self.timeDisplay = QLabel("000")
+        self.timeDisplay.setAlignment(Qt.AlignHCenter)
+
+        # button to reset the board
+        self.button = QPushButton("Reset")
+
+        fontMenu = QFont('Arial', 24)
+
+        self.totalMines.setFont(fontMenu)
+        self.timeDisplay.setFont(fontMenu)
+
 
         layout.addWidget(self.totalMines)
+        layout.addWidget(self.button)
+        layout.addWidget(self.timeDisplay)
+
+        self.setLayout(layout)
 
         
 def main():
