@@ -11,6 +11,8 @@ from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
+from PyQt5.QtCore import QSize
+
 
 class MineSweeperUI(QMainWindow):
     def __init__(self):
@@ -103,19 +105,27 @@ class PlayPage(QWidget):
         self.timeDisplay = QLabel("000")
         self.timeDisplay.setAlignment(Qt.AlignHCenter)
 
-        # button to reset the board
-        self.button = QPushButton("Reset")
+        # button widget to reset the board
+        self.reset = QPushButton()
+        self.reset.setFixedSize(QSize(32, 32))
+        self.reset.setStyleSheet("border-image : url(./images/smileyReset.png)")
+        
+        # button widget to return to the home screen
+        self.returnHome = QPushButton("Home")
+        self.returnHome.clicked.connect(self.parent().Home)
 
+        # basic fonts to make the font look bigger
         fontMenu = QFont('Arial', 24)
-
         self.totalMines.setFont(fontMenu)
         self.timeDisplay.setFont(fontMenu)
 
-
+        # add layouts and widget to the layout
         layout.addWidget(self.totalMines)
-        layout.addWidget(self.button)
+        layout.addWidget(self.reset)
         layout.addWidget(self.timeDisplay)
+        layout.addWidget(self.returnHome)
 
+        # set the layout
         self.setLayout(layout)
 
         
