@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import QGridLayout
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QFont, QPainter , QBrush, QColor
 from PyQt5.QtCore import QSize
 
 
@@ -21,7 +21,7 @@ class MineSweeperUI(QMainWindow):
         super().__init__()
         # set title and size when intialized
         self.setWindowTitle("Scuffed Minesweeper")
-        self.setFixedSize(700,700)
+        # self.setFixedSize(700,700)
         
         # a home screen
         self.Home()
@@ -41,7 +41,7 @@ class MineSweeperUI(QMainWindow):
         # set the layout for the main menu
         self.current_screen.setLayout(self.layout)
 
-    # easy difficulty when selected
+    # easy difficulty when selected, sets the dimensions and the number of mines
     def PlayEasy(self):
         self.gameLength = 9
         self.gameWidth = 9
@@ -49,7 +49,7 @@ class MineSweeperUI(QMainWindow):
         play = PlayPage(self)
         self.layout.addWidget(play)
     
-    # medium difficulty when selected
+    # medium difficulty when selected, sets the dimensions and the number of mines
     def PlayMedium(self):
         self.gameLength = 16
         self.gameWidth = 16
@@ -57,7 +57,7 @@ class MineSweeperUI(QMainWindow):
         play = PlayPage(self)
         self.layout.addWidget(play)
 
-    # Hard difficulty when selected
+    # Hard difficulty when selected, sets the dimensions and the number of mines
     def PlayHard(self):
         self.gameLength = 16
         self.gameWidth = 30
@@ -104,9 +104,9 @@ class PlayPage(QWidget):
         self.timeDisplay = QLabel("000")
         self.timeDisplay.setAlignment(Qt.AlignHCenter)
 
-        # button widget to reset the board
+        # button widget to reset the board, also use an image for the reset button minesweeper uses the face
         self.reset = QPushButton()
-        self.reset.setFixedSize(QSize(32, 32))
+        self.reset.setFixedSize(QSize(48, 48))
         self.reset.setStyleSheet("border-image : url(./images/smileyReset.png)")
         
         # button widget to return to the home screen
@@ -130,7 +130,7 @@ class PlayPage(QWidget):
 
         # grid for the game
         self.grid = QGridLayout()
-        self.grid.setSpacing(10)
+        self.grid.setSpacing(5)
 
         screen.addLayout(self.grid)
 
@@ -138,17 +138,62 @@ class PlayPage(QWidget):
         window.setLayout(screen)
         parent.setCentralWidget(window)
 
+        # initialize the map
+        self.initMap()
+        # start the state of the map in a new game
+        self.resetMap()
+
     # game set up
     def initMap(self):
         for row in range (0, self.gameLength):
             for col in range (0, self.gameWidth):
-                pass
+                cell = MinesweeperLogic(row, col)
+                self.grid.addWidget(cell, row, col)
+    # reset the map or start the state of the map in the case of a new game
+    def resetMap(self):
+        for row in range(0, self.gameLength):
+            for col in range(0, self.gameWidth):
+                cell = self.grid.itemAtPosition(row, col).widget()
+                cell.reset()
 
 class MinesweeperLogic(QWidget):
     def __init__(self, row, col):
-        super(MinesweeperLogic, self)
+        super(MinesweeperLogic, self).__init__()
         self.row = row 
         self.col = col
+        self.setFixedSize(QSize(20, 20))
+    
+    # reset all flags when resetting the game
+    def reset(self):
+        self.start_flag = False # bool variable used to check if game has started
+        self.mine_flag = False # bool variable used to check if there's a mine
+        self.adjacent = 0 # int variable to check for adjacent bombs
+        self.flagged = False # flagged bool variable to show if a tile is flagged
+        self.revealed = False # revealed bool variable to check if a tile has been revealed
+
+        self.update() # updates the view 
+
+    # method override pyqt's paintEvent, which will also update when calling self.update()
+    # the goal of this function is to draw the tiles on the grid
+    def paintEvent(self, cells):
+        #sets up class to draw on widgets
+        paint = QPainter(self)
+
+        # this is pyqt's way of getting the dimensions to the widget to be drawn
+        cell = cells.rect()
+
+        # if the cell is revealed then change the color of the tile
+        # set the color in revealed cells to a blueish - turquoish color
+        if self.revealed:
+            inner = QColor(75, 190, 175)
+        # this is for untouched tiles on the grid, which will just be gray
+        else: 
+            inner = Qt.lightGray
+        # fill the tile with their color
+        paint.fillRect(cell, QBrush(inner))
+        # draw the cell on the grid with the newly painted color
+        paint.drawRect(cell)
+
 
 def main():
     # instance of class
