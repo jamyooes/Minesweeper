@@ -5,7 +5,7 @@
 ## Goals for the GUI
 * On launch the GUI will have four widgets.
 * The first three widgets from left to right will have difficulties for the game. 
-* The right-most widget will explain the controls and how to play the game very breifly
+* The right-most widget will explain the controls and how to play the game very briefly
 
 ![](https://github.com/jamyooes/Minesweeper/blob/docs/readmeImages/home.PNG)
 
@@ -40,7 +40,7 @@ will be completely revealed
 select another difficulty for a new game
 
 ## Goals for the control
-* Breifly describes the controls for the game 
+* Briefly describes the controls for the game 
 * A button to return to the home screen
 
 ![](https://github.com/jamyooes/Minesweeper/blob/docs/readmeImages/controls.PNG)
