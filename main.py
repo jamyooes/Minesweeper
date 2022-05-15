@@ -213,7 +213,7 @@ class PlayPage(QMainWindow):
 
         # initialize the map
         self.initMap()
-        self.gameState(READY)
+
 
         # start the state of the map in a new game, and the timer wont start until clicking
         self.resetMap()
@@ -232,7 +232,7 @@ class PlayPage(QMainWindow):
                 cell.clicks.connect(self.gameStart)
                 cell.expand.connect(self.expandMap)
                 
-    # the logic is to check all the cells around the current cell
+    # the logic is to check all the cells around the current cell if it is blank
     # if the tile is not a mine then it will reveal it and then do another 
     # call to this function from click() and check again
     def expandMap(self, cellX, cellY):
@@ -243,7 +243,7 @@ class PlayPage(QMainWindow):
                 if not adjacentCell.mine_flag:
                     adjacentCell.clickedTile()
 
-    # reset the map or start the state of the map in the case of a new game
+    # reset the map or assign the mines and values in the case of a new game
     def resetMap(self):
 
         for row in range(0, self.gameLength):

@@ -73,14 +73,200 @@ when clicked
 for the controls text and a button to return to the home screen 
     
     -init(starts at 131)
-    TLDR: read the description to the class 
-    - Lines 132: initalizes the parent in order to call parent's methods
-    - Line 133: sets up a vertical layout for the controls 
-    - Lines 134-138: Text for the controls via labels
-    - Lines 140-143: Add the widgets to the layout
-    - Lines 144: Remove the space between the widgets in the layout
-    - Line 146: Create a home button widget to return to the home page
-    - Line 147: Connects the button to the home method, which will set the view to the home page 
-    - Line 150: set the current layout to the controls page 
+        TLDR: read the description to the class 
+        - Lines 132: initalizes the parent in order to call parent's methods
+        - Line 133: sets up a vertical layout for the controls 
+        - Lines 134-138: Text for the controls via labels
+        - Lines 140-143: Add the widgets to the layout
+        - Lines 144: Remove the space between the widgets in the layout
+        - Line 146: Create a home button widget to return to the home page
+        - Line 147: Connects the button to the home method, which will set the view to the home page 
+        - Line 150: set the current layout to the controls page 
 
-- PlayPage Class (Starts at Line 153)
+- PlayPage Class (Starts at Line 153) is a class for the actual grid of the game and will control
+the behavior of the game like the timer, mine indicator, win status, revealing the map, checking
+adjacent tiles, game over, etc...
+
+    -init (starts at line 155)
+        TLDR: creates the grid for the game and the indicatiors like the number of mines and the timer
+        the init will call other methods which will initialize the grid with the cells.
+        - Lines 158-160: store the details of the number of mines and dimensions from the parent (MineSweeperUI) 
+        - Lines 162-163: widgets for the layout and the window 
+        - Lines 166-167: labels and positioning for the number of mines based on flags placed 
+        - Lines 170-171: A timer label and positioning for the time elapsed since clicking
+        - Lines 174: Initialize the timer 
+        - Lines 175: Connect the timer to a class method (timeDisplay) that updates the timer 
+        - Lines 176: Update the timer every second 
+        - Lines 179-181: Create a button widget for the reset and overlay an image, which is a smiley like traditional minesweeper
+        - Line 182: Connect the reset button to a class method that will handle reset states 
+        - Lines 185-187: Apply a font to make the test look bigger for the timer and mines. 
+        - Lines 195-198: Add widgets to the layout for mine count, reset, and timer 
+        - Lines 201-202: Create a box layout for the entire screen and apply the previous made widgets 
+        - Lines 205-206: Create a grid and apply soacing between the cells inside he grid 
+        - Line 208: Add the grid to the layout  
+        - Lines 211-212: set the layout and then set the view to the window 
+        - Lines 215: initialize the map by adding cells onto the grid 
+        - Lines 219-220: reset map is needed to assign the mines and values to the grid 
+    
+    -initMap method (starts at line 223)
+        TLDR: adds empty cells onto the map
+        - Lines 224-233: loop adds the widgets onto the grid 
+            -Line 226: Creates a cell for each iteration of the loop and adds it to the grid 
+            -Lines 231-233: Connects methods from the cell child class to the current class (playpage) 
+            to trigger some methods like gameOver, gameStart, expandMap. For example, if the user clicked on a 
+            tile with a mine then the method from the cell will call the method in the parent (playpage), which will 
+            display the gameover 
+
+    -expandMap method (starts at line 238)
+        TLDR: expands the map when the clicked tile is empty and for other adjacent tiles are empty
+        - param: cellX, cellY 
+            -The position for the clicked cell 
+        - Lines 240-244: Loop to check adjcent tiles around the clicked tile that is not a mine 
+            -Lines 240-241: the max and min are guard cases in the case that the clicked cells will go out of bounds for checking adjacency
+            For example, clicking on the top left corner will mean there won't be an adjacent tile to the top and left part of the tile 
+            -Line 242: check the widget at the position 
+            -Line 243: check if the widget is not a mine, becuase if it is a mine then the game is over 
+            -Line 244: call a child method from MinesweeperCell class, which will reveal the white tiles connected to the current tile that is empty 
+
+    -resetMap method (starts at line 247)
+        TLDR: assigns the mines to random cells and gives the adjacencies to the bomb 
+        - Lines 249-252: call the cell child's method to reset all information from the prior game 
+        this won't matter much in the first game 
+        - Line 254: local variable to store the bomb locations and prevent duplicates 
+        - Lines 255-261: while loop to assign the bombs randomly until the bombs are all assigned according to the difficulty 
+            - Lines 256-257: randomly assign the coordinates to the bomb 
+            - Line 258: check if the coordinates is not a duplicate
+            - Line 259: get the cell if the coordinate does not have a bomb 
+            - Line 260: set the flag that there is a bomb in the location 
+            - Line 261: store the bomb coordinates in the local variable to keep track and prevent duplicates
+        - adjacentInCell helper function (starts at line 264)
+            TLDR: a helper function for the for loop at line 273 because a triple for loop is harder to read personally 
+            this function will return number of adjacent bombs to the cell 
+            - param : row, col 
+                - The position for the cell 
+            - Line 265: class method to get a list of cells adjacent to the current cell 
+            - Line 266: local variable track the number of bombs adjacent to the current cell 
+            - Lines 267-269: for loop to check all adjacent cells for the bomb and update the adjacent mine count 
+            - returns: returns the number of mines adjacent to the current cell
+        - Lines 273-276: for loop to assign the number of adjacent bombs using the helper function(adjacentInCell) from line 264 mentioned above 
+
+    -getAdjacents method (starts at line 280)
+        TLDR: gets the list of adjacent cells to the current cell this is used for the resetmap method from earlier (starts at line 247) 
+        - param : row, col 
+            - the position of the cell to check adjacencies
+        - Line 281: variable to store the list of adjacent cells 
+        - Lines 282-284: for loop to append all cells adjacent to the cell at the coordinates sent 
+        - return : returns all cells adjacent to the specified coordinates
+
+    -gameState method (starts at line 288)
+        TLDR: simple function to assign the game state
+    
+    -gameStart method (starts at line 291)
+        TLDR: start the timer when the user clicks on the grid this function is also 
+        connected to the user's clicks, so this method is used to check the bombs remaining and win checker
+        - Lines 293-295: set the game state to playing when the user clicks and start the timer 
+        - Line 296: this method will be called when the user clicks on the cell and will update the bombs ui when the user flags 
+        a cell, however the notification is only based on the number of flags placed, which is a minesweeper feature 
+        - Line 297: check if the user won by calling the method
+    
+    -gameOver method (starts at line 300)
+        TLDR: reveal the map, set the state to game over, and then popup notification when the user loses 
+        - Line 301: method call to reveal the map 
+        - Line 302: set the game state to gameover
+        - Line 303: send a pop up notification that the user lost 
+
+    -revealMap method (starts at line 306)
+        TLDR: reveal the map when called 
+        - Lines 307-310: for loop to reveal the map by going through each cell and displaying the cell by calling the cell's method of revealing the cell 
+    
+    -updateTime method (starts at line 310)
+        - Line 313: check if the game is ongoing, which is the only time the game timer updates 
+        - Line 314: time elapsed
+        - Line 315: update the text for text timer widget 
+    
+    -resetState method (starts at line 318)
+        TLDR: resets all the states for the game, which contorls a lot of conditions like the timer and popups
+        - Lines 319-321: if the user decides to reset the game without winning or losing then set the gamestate to game over and reveal the map 
+        - Lines 323-325: if the user won or lost then set the game to ready and then reset the map
+
+    -checkWin method (starts at line 328)
+        - Line 329: if the game is not already over and playing check if the game is won 
+        - Lines 330-342: for loop for checking if the game is won 
+        - Line 332: get the cell at each iteration
+        - Lines 334-335: if the cell is not revealed and is not a mine then the game is not over 
+        - Lines 337-338: if the cell is revealed and the flag is a mine then the game is lost
+        - Line 339: set state to won 
+        - Line 340: pop up for winning the game 
+        - Line 341: reveal the map 
+
+    -remainingBombsUpdate method (starts at line 345)
+        TLDR: this is a method to update the bomb count based on flags placed, however this is an indicator to help
+        the player keep track of remaining bombs, but not the actual number of bombs left 
+        - Line 346: local variable to keep track of bombs flagged 
+        - Lines 247-351: for loop to check all the cells that are flagged 
+        - Line 352: set the number of mines left indicator to the text to the number of mines - flagged cells 
+
+    -popup method (starts at line 355)
+        TLDR: a pop up when the user wins or lose 
+        - Lines 356-360: pop up message when the user loses 
+        - Lines 361-365: pop up message when the user wins 
+
+- MinesweeperCell Class (starts at line 367) is a class that represents a cell 
+
+    -signals 
+        - Lines 370-372: connected to the PlayPage Class at the initMap method 
+        which calls the method in the playPage class when the signals are called
+    
+    -init (starts at line 374) 
+        - Line 374: the minesweepercell class needs a row and col to initialize. 
+        - Lines 376-377: create variable to store the row and col 
+        - Line 378: set the size of the cell 
+        - Lines 381-382L store images for the mine and flag 
+    
+    -reset method (starts at line 386)
+        TLDR: variables that keep track on information related to the cell
+        - Line 387: variable on whether the cell is a mine or not 
+        - Line 388: variable that has the number of adjacencies to a bomb from the cell 
+        - Line 389: variable on whether the cell has been flagged or not 
+        - Line 390: variable on whether the cell has been revealed 
+        - Line 391: updates the view when one of the variables has been changed 
+    
+    -paintEvent method (starts at line 395)
+        TLDR: paint function, which updates when calling self.update. this method overrides pyqt's paintevent function 
+        - Line 397: set up the class to draw on widgets 
+        - Line 400: get the dimensions of the widget to draw 
+        - Lines 404-405: if the cell has been revealed changed the color of the tile to a turquoish color 
+        - Lines 407-408: if the cell has not been revealed then change the color of the tile to a lightgray color 
+        - Line 410: fill the cell with the color of revealed or not revealed 
+        - Line 412: paint the cell 
+        - Lines 414-423: text or bomb display when the cell has been revealed 
+            -Lines 416-418: if the tile is a mine then put the images of the mine 
+            -Lines 319-423: if the cell has adjacencies to a mine then draw the number on the cell in black 
+        - Lines 425-426: if the cell has been flagged then put the image of the flag on top of the cell 
+    
+    -flag method (starts at line 429)
+        TLDR: update the cell when flagging the cell 
+        - Line 430: inverse state of the cell. If the cell has not been flagged then it is flagged 
+        if the cell has been flag then unflag the cell 
+        - Line 431: update the grid and calls the paint method 
+        - Line 432: triggers the signal, which calls the method from the parent class in playpage class in the initmap method 
+    
+    -reveal method (starts at line 435)
+        - Line 436: unflag the cells that have been flagged 
+        - Line 437: reveal all the cells 
+        - Line 438: update the grid and call the paintEvent method to redraw the grid 
+
+    -clickedTile method (starts at line 442)
+        - Line 443-446: if the cell has not been revealed then reveal the cell and if the cell has no adjacent bombs
+        then call the parent (playPage)'s method to get all other connecting tiles that also has no adjacencies to a mine 
+        - Line 448: call parent's (playPage's) method to check win, remaining bombs, and if the game hasnt started 
+        then start the game timer  
+    
+    -mouseReleaseEvent (starts at line 451)
+        TLDR: overrides pyqt's method for mouse release events
+        - Lines 453-454: if the user right clicks on a non-revealed tile then apply the flag. if the tile has been flagged 
+        the flag method will unflag the cell 
+        -Line 456: if the user left clicks 
+            -Line 458-459: if the user left clicks a flagged cell then don' do anything 
+            -Lines 461: reveal the cell or expand the cell if there is a connection of empty cells 
+            -Lines 463-464: if the cell is a mine then call the parent's method to call gameover 
