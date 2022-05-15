@@ -1,2 +1,2 @@
 # Minesweeper
-A Pyqt app
+Using PyQt5, I created a minesweeper GUI. 
