@@ -1,0 +1,86 @@
+This document will describe all the classes and methods
+
+-The main function (starts at line 466) contains the basic set up for the app 
+with the instance of the class, initialize the view, showing the view, and 
+setting up the event loop 
+
+-The MineSweeperUI Class (starts at line 30) is a class for the main view 
+on the first start up of the GUI that contains the 
+difficulty options widgets and the control widgets. 
+There are 4 buttons and clicking them will open the game to the right 
+or replace the view with the controls 
+
+    -init (starts at line 31)
+        TLDR: sets up the basic view of the GUI on first launch with widgets to choose difficulty and controls
+        -Line 34 : Sets the title for the GUI 
+        -Line 36 : self.games is a list to hold the game. The goal of this variable 
+        is to prevent having multiple games on the screen when 
+        clicking on a different difficulty this is a solution to a bug I found
+        -Line 38 : self.Home() is a class method, which basically sets up the widgets on the screen 
+    
+    -Home method(starts at line 41)
+        TLDR: initializes widgets for the home screen
+        -Lines 43-44 : sets up home screen widget 
+        -Line 50 : Initalizes a class called PlayWidget, which is a class that creates the widgets 
+        for the controls and difficulties
+        -Line 53 : set the layout for the widgets horizontally
+
+    -PlayEasy method(starts at line 56)
+        TLDR: when called initalizes easy difficulty game widget and checks if there is only one game instance
+        - Lines 57-59 : sets up variables to the number of mines and dimensions for the game 
+        - Lines 60 : Initalizes the Game and sends all of the minesweeperUI's variables to the PlayPage
+        the most important being self.mines, self.gameLength, self.gameWidth
+        - Lines 62-68: If there is a game on the screen and the user decides to click on the difficulty
+        then remove the game from the screen and add the easy difficuly game widget.
+        If there is no game widgets on the screen (first GUI launch) then open the game 
+    
+    -PlayMedium method(starts at line 71)
+        TLDR: when called initalizes medium difficulty game widget to the game widget and checks if there is only one game instance
+        - Lines 72-74 : sets up variables to the number of mines and dimensions for the game 
+        - Lines 75 : Initalizes the Game and sends all of the minesweeperUI's variables to the PlayPage
+        the most important being self.mines, self.gameLength, self.gameWidth
+        - Lines 77-83: If there is a game on the screen and the user decides to click on the difficulty
+        then remove the game from the screen and add the medium difficuly game widget.
+        If there is no game widgets on the screen (first GUI launch) then open the game 
+    
+    -PlayHard Method (starts at line 86)
+        TLDR: when called initalizes hard difficulty game widget to the game widget and checks if there is only one game instance
+        - Lines 87-89 : sets up variables to the number of mines and dimensions for the game 
+        - Lines 90 : Initalizes the Game and sends all of the minesweeperUI's variables to the PlayPage
+        the most important being self.mines, self.gameLength, self.gameWidth
+        - Lines 92-98: If there is a game on the screen and the user decides to click on the difficulty
+        then remove the game from the screen and add the hard difficuly game widget.
+        If there is no game widgets on the screen (first GUI launch) then open the game 
+    
+    -Controls Method (Starts at line 100)
+        TLDR: when called initializes the controls and option to return to the home screen 
+        - Line 101: initializes the control page 
+        - Line 102-103: adds the widget and changes the entire view to the controls 
+
+- PlayWidget Class (Starts at Line 107) is a class that just intializes all the widgets 
+for the buttons for difficulty and controls. It also connects the buttons to the methods 
+defined in the minesweeperui such as the playeasy, playmedium, playhard, and controls method 
+when clicked
+
+    -init (starts at 108)
+        TLDR: read the description to the class 
+        - Lines 109: initialize the parent in order to call methods and access layouts
+        - Lines 111-114: create the button widgets 
+        - Lines 117-120: Add widgets to the layout 
+        - Lines 124-127: Connect the widgets to the parent (minesweeperUI)'S methods
+
+- ControlsPage Class  (Starts at Line 130) is a class to initializes all the widgets 
+for the controls text and a button to return to the home screen 
+    
+    -init(starts at 131)
+    TLDR: read the description to the class 
+    - Lines 132: initalizes the parent in order to call parent's methods
+    - Line 133: sets up a vertical layout for the controls 
+    - Lines 134-138: Text for the controls via labels
+    - Lines 140-143: Add the widgets to the layout
+    - Lines 144: Remove the space between the widgets in the layout
+    - Line 146: Create a home button widget to return to the home page
+    - Line 147: Connects the button to the home method, which will set the view to the home page 
+    - Line 150: set the current layout to the controls page 
+
+- PlayPage Class (Starts at Line 153)
