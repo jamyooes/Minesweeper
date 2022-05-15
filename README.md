@@ -6,12 +6,19 @@
 * On launch the GUI will have four widgets.
 * The first three widgets from left to right will have difficulties for the game. 
 * The right-most widget will explain the controls and how to play the game very breifly
+
 ![](https://github.com/jamyooes/Minesweeper/blob/docs/readmeImages/home.PNG)
+
 * 9X9 Minesweeper initalization
+
 ![](https://github.com/jamyooes/Minesweeper/blob/docs/readmeImages/easy.PNG)
+
 * 9X9 Minesweeper initalization
+
 ![](https://github.com/jamyooes/Minesweeper/blob/docs/readmeImages/medium.PNG)
+
 * 9X9 Minesweeper initalization
+
 ![](https://github.com/jamyooes/Minesweeper/blob/docs/readmeImages/hard.PNG)
 
 
